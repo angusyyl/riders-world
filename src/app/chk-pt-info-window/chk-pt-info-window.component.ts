@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-chk-pt-info-window',
@@ -94,7 +94,7 @@ export class ChkPtInfoWindowComponent {
   showCheckPointDetail(): void {
     console.log('showCheckPointDetail being clicked');
   }
-  
+
   updateChkPtInfo() {
     this.onValueChanged.emit({'id': this._id, 'name': this._name, 'arrivalTimestamp': this._arrivalTimestamp, 'leaveTimestamp': this._leaveTimestamp});
   }

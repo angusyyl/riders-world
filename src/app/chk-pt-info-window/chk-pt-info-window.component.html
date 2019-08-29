@@ -1,24 +1,32 @@
-<mat-form-field class="chk-pt-info-win-header">
+<nz-input-group [nzSuffix]="suffixTemplate">
   <input matInput type="text" [value]="name" (keyup)="updateName($event)"/>
-  <button mat-button *ngIf="name" matSuffix mat-icon-button aria-label="Clear" (click)="name=''">
-    <mat-icon>close</mat-icon>
-  </button>
-</mat-form-field>
-<div>Arrival Time: 
+</nz-input-group>
+<ng-template #suffixTemplate
+  ><i
+    nz-icon
+    nz-tooltip
+    class="ant-input-clear-icon"
+    nzTheme="fill"
+    nzType="close-circle"
+    *ngIf="name"
+    (click)="name = null"
+  ></i
+></ng-template>
+<div>Arrival Time:
     <mat-form-field class="chk-pt-info-win-header">
         <input matInput type="text" [value]="arrivalTimestamp" (keyup)="updateArrivalTimestamp($event)" />
+        <button mat-button *ngIf="arrivalTimestamp" matSuffix mat-icon-button aria-label="Clear" (click)="arrivalTimestamp=''">
+          <mat-icon>close</mat-icon>
+        </button>
     </mat-form-field>
-    <button mat-button *ngIf="arrivalTimestamp" matSuffix mat-icon-button aria-label="Clear" (click)="arrivalTimestamp=''">
-      <mat-icon>close</mat-icon>
-    </button>
 </div>
-<div>Leave Time: 
+<div>Leave Time:
     <mat-form-field class="chk-pt-info-win-header">
         <input matInput type="text" [value]="leaveTimestamp" (keyup)="updateLeaveTimestamp($event)" />
+        <button mat-button *ngIf="leaveTimestamp" matSuffix mat-icon-button aria-label="Clear" (click)="leaveTimestamp=''">
+          <mat-icon>close</mat-icon>
+        </button>
     </mat-form-field>
-    <button mat-button *ngIf="leaveTimestamp" matSuffix mat-icon-button aria-label="Clear" (click)="leaveTimestamp=''">
-      <mat-icon>close</mat-icon>
-    </button>
 </div>
 <div><button class="mat-raised-button mat-warn" color="warn" (click)="showCheckPointDetail()">Details</button></div>
 <!-- <div><button (click)="showCheckPointDetail()">Details</button></div> -->

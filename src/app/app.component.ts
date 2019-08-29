@@ -1,7 +1,8 @@
 import { Component, ViewChild, ElementRef, NgZone, ComponentRef, Injector, ComponentFactoryResolver, ApplicationRef } from '@angular/core';
 import { } from 'googlemaps';
 import { ChkPtInfoWindowComponent } from './chk-pt-info-window/chk-pt-info-window.component';
-import { markParentViewsForCheck } from '@angular/core/src/view/util';
+import { CheckPoint } from './shared/models/check-point.model';
+import { TransportEnum } from './shared/enums/transport-enum';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ export class AppComponent {
   @ViewChild('map') mapElement: any;
   // @ViewChild('chkPtInfoWindow', {read: ElementRef}) chkPtinfoWindowElement: ElementRef;
   map: google.maps.Map;
-  //info window content dynamically assigned and then appended to chkPtInfoWindow
+  // info window content dynamically assigned and then appended to chkPtInfoWindow
   chkPtInfoWinCompRef: ComponentRef<ChkPtInfoWindowComponent>;
   chkPtInfoWindow: google.maps.InfoWindow;
 
@@ -22,7 +23,7 @@ export class AppComponent {
   infoWinChkPtLeaveTimestamp: string;
 
   // load check points
-  checkPoints: CheckPointI[] = [
+  checkPoints: CheckPoint[] = [
     { id: 1, lat: 23.292724, lng: 113.837872, name: '增城二汽客運站', arrivalTimestamp: '2019-06-29 13:20', leaveTimestamp: '2019-06-29 13:20', locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike},
     { id: 2, lat: 23.301143, lng: 113.841652, name: '西堤驛站', arrivalTimestamp: '2019-06-29 14:00', leaveTimestamp: '2019-06-29 14:15', locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike },
     // {lat: 23.272830, lng: 113.823985, name: '增江畫廊', arrivalTimestamp: '2019-06-29 14:40', leaveTimestamp: '2019-06-29 15:00', locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike},
@@ -44,9 +45,9 @@ export class AppComponent {
   // }
 
   constructor(private injector: Injector,
-    private resolver: ComponentFactoryResolver,
-    private appRef: ApplicationRef,
-    private zone: NgZone) {
+              private resolver: ComponentFactoryResolver,
+              private appRef: ApplicationRef,
+              private zone: NgZone) {
   }
 
   ngOnInit(): void {
@@ -117,13 +118,13 @@ export class AppComponent {
         // add position changed event listener to marker
         marker.addListener('position_changed', () => {
           this.zone.run(() => this.onCheckPointMarkerDragend(marker, chkPt));
-        })
+        });
 
         // add close click event listener to info window
         this.chkPtInfoWindow.addListener('closeclick', _ => {
           this.markerBounceStop(marker);
           this.chkPtInfoWinCompRef.destroy();
-        })
+        });
 
         this.checkPointMarkers.push(marker);
       }, i * timeout);
@@ -135,8 +136,8 @@ export class AppComponent {
    * @param marker an anchor of Marker class where the info window positions at
    * @param chkPt a check point to be passed in to display its information on info window
    */
-  onCheckPointMarkerClick(marker: google.maps.Marker, chkPt: CheckPointI) {
-    if (this.chkPtInfoWinCompRef) this.chkPtInfoWinCompRef.destroy();
+  onCheckPointMarkerClick(marker: google.maps.Marker, chkPt: CheckPoint) {
+    if (this.chkPtInfoWinCompRef) { this.chkPtInfoWinCompRef.destroy(); }
 
     // dynamic creation of info window component, ChkPtInfoWindowComponent should be declared in entryComponents
     const compFactory = this.resolver.resolveComponentFactory(ChkPtInfoWindowComponent);
@@ -173,9 +174,9 @@ export class AppComponent {
    * @param marker an anchor of Marker class where the info window positions at
    * @param chkPt a check point to be passed in to display its information on info window
    */
-  onCheckPointMarkerDragend(marker: google.maps.Marker, chkPt: CheckPointI) {
+  onCheckPointMarkerDragend(marker: google.maps.Marker, chkPt: CheckPoint) {
     chkPt.lat = marker.getPosition().lat();
-    chkPt.lng = marker.getPosition().lng();;
+    chkPt.lng = marker.getPosition().lng();
 
     // console.log(chkPt);
   }
@@ -183,27 +184,4 @@ export class AppComponent {
   showCheckPointDetail(): void {
     alert('click');
   }
-}
-
-interface CheckPointI {
-  id: number;
-  lat: number;
-  lng: number;
-  name?: string;
-  arrivalTimestamp?: string;
-  leaveTimestamp?: string;
-  locale?: string;
-  routeType: string; // trip or bike
-  arrivalTransport: TransportEnum;
-  leaveTransport: TransportEnum;
-  // createdDate: string;
-  // updatedDate: string;
-  // weather: string;
-}
-
-const enum TransportEnum {
-  Bike = "By bike",
-  Foot = "On foot",
-  Aeroplane = "By aeroplane",
-  Ship = "By ship",
 }
