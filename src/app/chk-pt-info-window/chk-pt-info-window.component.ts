@@ -48,18 +48,18 @@ export class ChkPtInfoWindowComponent {
     this._leaveTimestamp = leaveTimestamp;
   }
 
-  updateName(e) {
-    this._name = e.target.value;
+  updateName(value: string) {
+    this._name = value;
     this.updateChkPtInfo();
   }
 
-  updateArrivalTimestamp(e) {
-    this._arrivalTimestamp = e.target.value;
+  updateArrivalTimestamp(value) {
+    this._arrivalTimestamp = value;
     this.updateChkPtInfo();
   }
 
-  updateLeaveTimestamp(e) {
-    this._leaveTimestamp = e.target.value;
+  updateLeaveTimestamp(value) {
+    this._leaveTimestamp = value;
     this.updateChkPtInfo();
   }
 
