@@ -24,10 +24,11 @@ export class AppComponent {
 
   // load check points
   checkPoints: CheckPoint[] = [
-    { id: 1, lat: 23.292724, lng: 113.837872, name: '增城二汽客運站', arrivalTimestamp: '2019-06-29 13:20', leaveTimestamp: '2019-06-29 13:20', locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike},
-    { id: 2, lat: 23.301143, lng: 113.841652, name: '西堤驛站', arrivalTimestamp: '2019-06-29 14:00', leaveTimestamp: '2019-06-29 14:15', locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike },
-    // {lat: 23.272830, lng: 113.823985, name: '增江畫廊', arrivalTimestamp: '2019-06-29 14:40', leaveTimestamp: '2019-06-29 15:00', locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike},
-    { id: 3, lat: 23.580521, lng: 113.763743, name: '白水寨風景區', arrivalTimestamp: '2019-06-29 19:00', leaveTimestamp: '2019-06-29 15:00', locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike }
+    // { id: 1, lat: 22.531664, lng: 114.114787, name: '羅湖汽車客運站', arrivalTimestamp: new Date(2019,6,29,10,30), leaveTimestamp: new Date(2019,6,29,10,50), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Train, leaveTransport: TransportEnum.Bus },
+    { id: 1, lat: 23.292724, lng: 113.837872, name: '增城二汽客運站', arrivalTimestamp: new Date(2019, 6, 29, 13, 20), leaveTimestamp: new Date(2019, 6, 29, 13, 20), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike },
+    { id: 2, lat: 23.301143, lng: 113.841652, name: '西堤驛站', arrivalTimestamp: new Date(2019, 6, 29, 14, 0), leaveTimestamp: new Date(2019, 6, 29, 14, 16), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike },
+    { id: 3, lat: 23.337663, lng: 113.834488, name: '增江畫廊', arrivalTimestamp: new Date(2019, 6, 29, 14, 39), leaveTimestamp: new Date(2019, 6, 29, 14, 42), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike },
+    { id: 4, lat: 23.562432, lng: 113.773998, name: '白水寨大家族公館', arrivalTimestamp: new Date(2019, 6, 29, 19, 0), leaveTimestamp: new Date(2019, 6, 30, 11, 0), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike }
   ];
 
   chkPtImage = {
@@ -81,12 +82,17 @@ export class AppComponent {
   //   console.log('parent ngAfterViewChecked()');
   // }
 
-  markerBounceStart(marker: google.maps.Marker) {
+  markerBounceStart(marker: google.maps.Marker): void {
+    this.allCheckPointMarkersStop();
     marker.setAnimation(google.maps.Animation.BOUNCE);
   }
 
-  markerBounceStop(marker: google.maps.Marker) {
+  markerBounceStop(marker: google.maps.Marker): void {
     marker.setAnimation(null);
+  }
+
+  allCheckPointMarkersStop(): void {
+    this.checkPointMarkers.forEach(marker => this.markerBounceStop(marker));
   }
 
   /**

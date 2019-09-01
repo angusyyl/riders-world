@@ -1,4 +1,5 @@
 import { Component, EventEmitter } from '@angular/core';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 @Component({
   selector: 'app-chk-pt-info-window',
@@ -9,8 +10,8 @@ export class ChkPtInfoWindowComponent {
 
   private _id: number;
   private _name: string;
-  private _arrivalTimestamp: string;
-  private _leaveTimestamp: string;
+  private _arrivalTimestamp: Date;
+  private _leaveTimestamp: Date;
 
   onValueChanged = new EventEmitter();
 
@@ -32,19 +33,19 @@ export class ChkPtInfoWindowComponent {
     this._name = name;
   }
 
-  get arrivalTimestamp(): string {
+  get arrivalTimestamp(): Date {
     return this._arrivalTimestamp;
   }
 
-  set arrivalTimestamp(arrivalTimestamp: string) {
+  set arrivalTimestamp(arrivalTimestamp: Date) {
     this._arrivalTimestamp = arrivalTimestamp;
   }
 
-  get leaveTimestamp(): string {
+  get leaveTimestamp(): Date {
     return this._leaveTimestamp;
   }
 
-  set leaveTimestamp(leaveTimestamp: string) {
+  set leaveTimestamp(leaveTimestamp: Date) {
     this._leaveTimestamp = leaveTimestamp;
   }
 
@@ -53,13 +54,18 @@ export class ChkPtInfoWindowComponent {
     this.updateChkPtInfo();
   }
 
-  updateArrivalTimestamp(value) {
-    this._arrivalTimestamp = value;
-    this.updateChkPtInfo();
-  }
-
-  updateLeaveTimestamp(value) {
-    this._leaveTimestamp = value;
+  onTimestampChange(result: Date) {
+    console.log(result[0]);
+    if (result[0] === undefined) {
+      this._arrivalTimestamp = null;
+    } else {
+      this._arrivalTimestamp = result[0];
+    }
+    if (result[1] === undefined) {
+      this._leaveTimestamp = null;
+    } else {
+      this._leaveTimestamp = result[1];
+    }
     this.updateChkPtInfo();
   }
 
@@ -96,6 +102,6 @@ export class ChkPtInfoWindowComponent {
   }
 
   updateChkPtInfo() {
-    this.onValueChanged.emit({'id': this._id, 'name': this._name, 'arrivalTimestamp': this._arrivalTimestamp, 'leaveTimestamp': this._leaveTimestamp});
+    this.onValueChanged.emit({id: this._id, name: this._name, arrivalTimestamp: this._arrivalTimestamp, leaveTimestamp: this._leaveTimestamp});
   }
 }

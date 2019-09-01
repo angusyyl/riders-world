@@ -5,8 +5,8 @@ export class CheckPoint {
   lat: number;
   lng: number;
   name?: string;
-  arrivalTimestamp?: string;
-  leaveTimestamp?: string;
+  arrivalTimestamp?: Date;
+  leaveTimestamp?: Date;
   locale?: string;
   routeType: string; // trip or bike
   arrivalTransport: TransportEnum;
