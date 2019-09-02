@@ -11,7 +11,7 @@ export class ChkPtInfoWindowComponent {
   private _id: number;
   private _name: string;
   private _arrivalTimestamp: Date;
-  private _leaveTimestamp: Date;
+  private _depTimestamp: Date;
 
   onValueChanged = new EventEmitter();
 
@@ -41,12 +41,12 @@ export class ChkPtInfoWindowComponent {
     this._arrivalTimestamp = arrivalTimestamp;
   }
 
-  get leaveTimestamp(): Date {
-    return this._leaveTimestamp;
+  get depTimestamp(): Date {
+    return this._depTimestamp;
   }
 
-  set leaveTimestamp(leaveTimestamp: Date) {
-    this._leaveTimestamp = leaveTimestamp;
+  set depTimestamp(depTimestamp: Date) {
+    this._depTimestamp = depTimestamp;
   }
 
   updateName(value: string) {
@@ -62,9 +62,9 @@ export class ChkPtInfoWindowComponent {
       this._arrivalTimestamp = result[0];
     }
     if (result[1] === undefined) {
-      this._leaveTimestamp = null;
+      this._depTimestamp = null;
     } else {
-      this._leaveTimestamp = result[1];
+      this._depTimestamp = result[1];
     }
     this.updateChkPtInfo();
   }
@@ -102,6 +102,6 @@ export class ChkPtInfoWindowComponent {
   }
 
   updateChkPtInfo() {
-    this.onValueChanged.emit({id: this._id, name: this._name, arrivalTimestamp: this._arrivalTimestamp, leaveTimestamp: this._leaveTimestamp});
+    this.onValueChanged.emit({id: this._id, name: this._name, arrivalTimestamp: this._arrivalTimestamp, depTimestamp: this._depTimestamp});
   }
 }

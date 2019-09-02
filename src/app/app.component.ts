@@ -20,23 +20,25 @@ export class AppComponent {
   infoWinChkPtId: number;
   infoWinChkPtName: string;
   infoWinChkPtArrivalTimestamp: string;
-  infoWinChkPtLeaveTimestamp: string;
+  infoWinChkPtDepTimestamp: string;
 
   // load check points
   checkPoints: CheckPoint[] = [
-    // { id: 1, lat: 22.531664, lng: 114.114787, name: '羅湖汽車客運站', arrivalTimestamp: new Date(2019,6,29,10,30), leaveTimestamp: new Date(2019,6,29,10,50), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Train, leaveTransport: TransportEnum.Bus },
-    { id: 1, lat: 23.292724, lng: 113.837872, name: '增城二汽客運站', arrivalTimestamp: new Date(2019, 6, 29, 13, 20), leaveTimestamp: new Date(2019, 6, 29, 13, 20), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike },
-    { id: 2, lat: 23.301143, lng: 113.841652, name: '西堤驛站', arrivalTimestamp: new Date(2019, 6, 29, 14, 0), leaveTimestamp: new Date(2019, 6, 29, 14, 16), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike },
-    { id: 3, lat: 23.337663, lng: 113.834488, name: '增江畫廊', arrivalTimestamp: new Date(2019, 6, 29, 14, 39), leaveTimestamp: new Date(2019, 6, 29, 14, 42), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike },
-    { id: 4, lat: 23.562432, lng: 113.773998, name: '白水寨大家族公館', arrivalTimestamp: new Date(2019, 6, 29, 19, 0), leaveTimestamp: new Date(2019, 6, 30, 11, 0), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, leaveTransport: TransportEnum.Bike }
+    // { id: 1, lat: 22.531664, lng: 114.114787, name: '羅湖汽車客運站', arrivalTimestamp: new Date(2019,6,29,10,30), depTimestamp: new Date(2019,6,29,10,50), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Train, depTransport: TransportEnum.Bus },
+    { id: 1, lat: 23.292724, lng: 113.837872, name: '增城二汽客運站', arrivalTimestamp: new Date(2019, 6, 29, 13, 20), depTimestamp: new Date(2019, 6, 29, 13, 20), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, depTransport: TransportEnum.Bike },
+    { id: 2, lat: 23.301143, lng: 113.841652, name: '西堤驛站', arrivalTimestamp: new Date(2019, 6, 29, 14, 0), depTimestamp: new Date(2019, 6, 29, 14, 16), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, depTransport: TransportEnum.Bike },
+    { id: 3, lat: 23.337663, lng: 113.834488, name: '增江畫廊', arrivalTimestamp: new Date(2019, 6, 29, 14, 39), depTimestamp: new Date(2019, 6, 29, 14, 42), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, depTransport: TransportEnum.Bike },
+    { id: 4, lat: 23.562432, lng: 113.773998, name: '白水寨大家族公館', arrivalTimestamp: new Date(2019, 6, 29, 19, 0), depTimestamp: new Date(2019, 6, 30, 11, 0), locale: 'zh_cn', routeType: 'bike', arrivalTransport: TransportEnum.Bike, depTransport: TransportEnum.Bike }
   ];
 
-  chkPtImage = {
-    url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-    // url: 'assets/images/bicycle-rider.svg',
-    // This marker is 20 pixels wide by 32 pixels high.
-    size: new google.maps.Size(20, 32)
-  };
+  icons = {
+    chkPt: {
+      url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+      //url: './assets/images/bicycle-rider.svg',
+      // This marker is 20 pixels wide by 32 pixels high.
+      scaledSize: new google.maps.Size(20, 32)
+    }
+  }
 
   // hold check point markers
   checkPointMarkers = [];
@@ -51,6 +53,9 @@ export class AppComponent {
               private zone: NgZone) {
   }
 
+  /**
+   * initalize map
+   */
   ngOnInit(): void {
     const mapProperties = {
       center: new google.maps.LatLng(this.checkPoints[0].lat, this.checkPoints[0].lng),
@@ -58,8 +63,14 @@ export class AppComponent {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapProperties);
+
+    // info window of marker
     this.chkPtInfoWindow = new google.maps.InfoWindow();
     this.addCheckPointMarkesWithTimeout(800);
+    
+    // transit layer
+    const transitLayer = new google.maps.BicyclingLayer();
+    transitLayer.setMap(this.map);
   }
 
   // ngDoCheck() {
@@ -111,7 +122,7 @@ export class AppComponent {
             title: chkPt.name,
             animation: google.maps.Animation.DROP,
             draggable: true,
-            icon: this.chkPtImage
+            icon: this.icons.chkPt
           }
         );
 
@@ -151,14 +162,14 @@ export class AppComponent {
     this.chkPtInfoWinCompRef.instance.id = chkPt.id;
     this.chkPtInfoWinCompRef.instance.name = chkPt.name;
     this.chkPtInfoWinCompRef.instance.arrivalTimestamp = chkPt.arrivalTimestamp;
-    this.chkPtInfoWinCompRef.instance.leaveTimestamp = chkPt.leaveTimestamp;
+    this.chkPtInfoWinCompRef.instance.depTimestamp = chkPt.depTimestamp;
 
     // parent-child communication
     const subscription = this.chkPtInfoWinCompRef.instance.onValueChanged.subscribe((uChkPt: ChkPtInfoWindowComponent) => {
       this.checkPoints.filter(currChkPt => currChkPt.id === uChkPt.id).map(filteredChkPt => {
         filteredChkPt.name = uChkPt.name;
         filteredChkPt.arrivalTimestamp = uChkPt.arrivalTimestamp;
-        filteredChkPt.leaveTimestamp = uChkPt.leaveTimestamp;
+        filteredChkPt.depTimestamp = uChkPt.depTimestamp;
       });
     });
 

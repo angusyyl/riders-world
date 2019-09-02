@@ -6,11 +6,11 @@ export class CheckPoint {
   lng: number;
   name?: string;
   arrivalTimestamp?: Date;
-  leaveTimestamp?: Date;
+  depTimestamp?: Date;
   locale?: string;
   routeType: string; // trip or bike
   arrivalTransport: TransportEnum;
-  leaveTransport: TransportEnum;
+  depTransport: TransportEnum;
   // createdDate: string;
   // updatedDate: string;
   // weather: string;

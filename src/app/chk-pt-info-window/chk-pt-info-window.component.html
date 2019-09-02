@@ -13,12 +13,12 @@
   ></i
 ></ng-template>
 
-<div>Arrival & Leave Time:</div>
+<div>Arrival & Departure Time:</div>
 <nz-range-picker
-[ngModel]="[arrivalTimestamp, leaveTimestamp]"
+[ngModel]="[arrivalTimestamp, depTimestamp]"
 [nzShowTime]="{ nzFormat: 'HH:mm' }"
 nzFormat="yyyy-MM-dd HH:mm"
-[nzPlaceHolder]="['Arrival Time', 'Leave Time']"
+[nzPlaceHolder]="['Arrival Time', 'Departure Time']"
 (nzOnOk)="onTimestampChange($event)"
 ></nz-range-picker>
 
