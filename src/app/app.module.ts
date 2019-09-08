@@ -8,12 +8,14 @@ import { MaterialModule } from './material-module/material-module.module';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AntDesignModule } from './material-module/ant-design.module';
+import { CustomMapControlComponent } from './custom-map-control/custom-map-control.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChkPtInfoWindowComponent
+    ChkPtInfoWindowComponent,
+    CustomMapControlComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +25,10 @@ import { AntDesignModule } from './material-module/ant-design.module';
     AntDesignModule,
     BrowserAnimationsModule
   ],
-  entryComponents: [ChkPtInfoWindowComponent],
+  entryComponents: [
+    ChkPtInfoWindowComponent,
+    CustomMapControlComponent
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

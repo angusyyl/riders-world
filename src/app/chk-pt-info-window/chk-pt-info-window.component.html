@@ -1,5 +1,5 @@
 <nz-input-group [nzSuffix]="nameSuffixTemplate">
-  <input type="text" nz-input [value]="name" (keyup)="updateName($event.target.value)"/>
+  <input type="text" nz-input [value]="name" (keyup)="onNameCHange($event.target.value)"/>
 </nz-input-group>
 <ng-template #nameSuffixTemplate
   ><i
@@ -9,7 +9,7 @@
     nzTheme="fill"
     nzType="close-circle"
     *ngIf="name"
-    (click)="updateName(null)"
+    (click)="onNameCHange(null)"
   ></i
 ></ng-template>
 

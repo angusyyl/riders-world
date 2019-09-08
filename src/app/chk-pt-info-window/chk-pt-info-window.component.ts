@@ -49,13 +49,12 @@ export class ChkPtInfoWindowComponent {
     this._depTimestamp = depTimestamp;
   }
 
-  updateName(value: string) {
+  onNameCHange(value: string) {
     this._name = value;
     this.updateChkPtInfo();
   }
 
   onTimestampChange(result: Date) {
-    console.log(result[0]);
     if (result[0] === undefined) {
       this._arrivalTimestamp = null;
     } else {
