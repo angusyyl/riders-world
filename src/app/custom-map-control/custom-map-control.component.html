@@ -1,4 +1,7 @@
 <div>
-  <!-- <label nz-checkbox [(ngModel)]="googleMapRouteChecked">Enable Google Map Route</label> -->
-  Enable Google Map Route
+  <!-- <label name="checkbox" nz-checkbox [(ngModel)]="googleMapRouteChecked">Enable Google Map Route</label> -->
+  <nz-switch nzSize="small" [ngModel]="googleMapRouteChecked" (ngModelChange)="onGoogleMapRouteChange($event)"></nz-switch>
+  <!-- <input type="checkbox" [checked]="googleMapRouteChecked" (change)="updateControlOptions($event)">
+  <label>Enable Google Map Route</label> -->
+  <!-- Enable Google Map Route -->
 </div>

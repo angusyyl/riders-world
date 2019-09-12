@@ -69,31 +69,31 @@ export class ChkPtInfoWindowComponent {
   }
 
   // ngOnChanges()	{
-  //   console.log('child ngOnChanges()');
+  //   console.log('child ChkPtInfoWindowComponent ngOnChanges()');
   // }
 
   // ngOnInit(): void {
-  //   console.log('child ngOnInit()');
+  //   console.log('child ChkPtInfoWindowComponent ngOnInit()');
   // }
 
   // ngDoCheck() {
-  //   console.log('child ngDoCheck()');
+  //   console.log('child ChkPtInfoWindowComponent ngDoCheck()');
   // }
 
   // ngAfterContentInit() {
-  //   console.log('child ngAfterContentInit()');
+  //   console.log('child ChkPtInfoWindowComponent ngAfterContentInit()');
   // }
 
   // ngAfterContentChecked() {
-  //   console.log('child ngAfterContentChecked()');
+  //   console.log('child ChkPtInfoWindowComponent ngAfterContentChecked()');
   // }
 
   // ngAfterViewInit() {
-  //   console.log('child ngAfterViewInit()');
+  //   console.log('child ChkPtInfoWindowComponent ngAfterViewInit()');
   // }
 
   // ngAfterViewChecked(){
-  //   console.log('child ngAfterViewChecked()');
+  //   console.log('child ChkPtInfoWindowComponent ngAfterViewChecked()');
   // }
 
   showCheckPointDetail(): void {

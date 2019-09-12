@@ -69,6 +69,8 @@ export class AppComponent implements OnInit {
    * initalize map
    */
   ngOnInit(): void {
+    console.log('parent ngDoCheck()');
+
     // map
     const mapOptions: google.maps.MapOptions = {
       center: new google.maps.LatLng(this.checkPoints[0].lat, this.checkPoints[0].lng),
@@ -109,7 +111,9 @@ export class AppComponent implements OnInit {
     // dynamic creation of custom map control component, CustomMapControlComponent should be declared in entryComponents
     const compFactory = this.resolver.resolveComponentFactory(CustomMapControlComponent);
     this.customMapControlCompRef = compFactory.create(this.injector);
-    this.customMapControlCompRef.instance.googleMapRouteChecked = true;
+    const inst = this.customMapControlCompRef.instance;
+    // inst.toggleChecked($event);
+    // inst.toggleChecked(!inst.googleMapRouteChecked);
 
     // parent-child communication
     const subscription = this.customMapControlCompRef.instance.onValueChanged.subscribe((updControlOptions: CustomMapControlComponent) => {
@@ -125,6 +129,7 @@ export class AppComponent implements OnInit {
       subscription.unsubscribe();
     });
   }
+  
   // ngDoCheck() {
   //   console.log('parent ngDoCheck()');
   // }

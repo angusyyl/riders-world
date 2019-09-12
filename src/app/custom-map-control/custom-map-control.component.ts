@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-custom-map-control',
@@ -7,25 +7,58 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 })
 export class CustomMapControlComponent implements OnInit {
 
-  private _googleMapRouteChecked: boolean;
+  googleMapRouteChecked: boolean = true;
 
   onValueChanged = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
+    console.log('child CustomMapControlComponent ngOnInit()');
   }
 
-  get googleMapRouteChecked(): boolean {
-    return this._googleMapRouteChecked;
-  }
-
-  set googleMapRouteChecked(checked: boolean) {
-    this._googleMapRouteChecked = checked;
+  onGoogleMapRouteChange(checked: boolean) {
+    this.googleMapRouteChecked = checked;
     this.updateControlOptions();
   }
+  // get googleMapRouteChecked(): boolean {
+  //   return this._googleMapRouteChecked;
+  // }
+
+  // set googleMapRouteChecked(checked: boolean) {
+  //   this._googleMapRouteChecked = !checked;
+  //   //this.updateControlOptions();
+  // }
+  
+  // toggleChecked(toggleVal: boolean): void {
+  //   this._googleMapRouteChecked = toggleVal;
+  // }
 
   updateControlOptions() {
-    this.onValueChanged.emit({googleMapRouteChecked: this._googleMapRouteChecked});
+    this.onValueChanged.emit({googleMapRouteChecked: this.googleMapRouteChecked});
   }
+
+  // ngOnChanges()	{
+  //   console.log('child CustomMapControlComponent ngOnChanges()');
+  // }
+
+  // ngDoCheck() {
+  //   console.log('child CustomMapControlComponent ngDoCheck()');
+  // }
+
+  // ngAfterContentInit() {
+  //   console.log('child CustomMapControlComponent ngAfterContentInit()');
+  // }
+
+  // ngAfterContentChecked() {
+  //   console.log('child CustomMapControlComponent ngAfterContentChecked()');
+  // }
+
+  // ngAfterViewInit() {
+  //   console.log('child CustomMapControlComponent ngAfterViewInit()');
+  // }
+
+  // ngAfterViewChecked(){
+  //   console.log('child CustomMapControlComponent ngAfterViewChecked()');
+  // }
 }
