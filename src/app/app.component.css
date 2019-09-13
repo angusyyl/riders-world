@@ -1,6 +1,9 @@
 /* Always set the map height explicitly to define the size of the div
  * element that contains the map. */
 .google-map {
-  height: 400px;
+  height: 80%;
   width: 100%;
+}
+.direction-panel {
+  width: 500px;
 }

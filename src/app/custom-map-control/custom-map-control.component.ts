@@ -8,6 +8,8 @@ import { Component, OnInit, EventEmitter, Input } from '@angular/core';
 export class CustomMapControlComponent implements OnInit {
 
   googleMapRouteChecked: boolean = true;
+  trafficRouteChecked: boolean = false;
+  bicycleRouteChecked: boolean = false;
 
   onValueChanged = new EventEmitter();
 
@@ -17,25 +19,23 @@ export class CustomMapControlComponent implements OnInit {
     console.log('child CustomMapControlComponent ngOnInit()');
   }
 
-  onGoogleMapRouteChange(checked: boolean) {
+  onGoogleMapRouteOptChange(checked: boolean) {
     this.googleMapRouteChecked = checked;
     this.updateControlOptions();
   }
-  // get googleMapRouteChecked(): boolean {
-  //   return this._googleMapRouteChecked;
-  // }
 
-  // set googleMapRouteChecked(checked: boolean) {
-  //   this._googleMapRouteChecked = !checked;
-  //   //this.updateControlOptions();
-  // }
-  
-  // toggleChecked(toggleVal: boolean): void {
-  //   this._googleMapRouteChecked = toggleVal;
-  // }
+  onTrafficRouteOptChange(checked: boolean) {
+    this.trafficRouteChecked = checked;
+    this.updateControlOptions();
+  }
+
+  onBicycleRouteOptChange(checked: boolean) {
+    this.bicycleRouteChecked = checked;
+    this.updateControlOptions();
+  }
 
   updateControlOptions() {
-    this.onValueChanged.emit({googleMapRouteChecked: this.googleMapRouteChecked});
+    this.onValueChanged.emit({ googleMapRouteChecked: this.googleMapRouteChecked, trafficRouteChecked: this.trafficRouteChecked, bicycleRouteChecked: this.bicycleRouteChecked });
   }
 
   // ngOnChanges()	{

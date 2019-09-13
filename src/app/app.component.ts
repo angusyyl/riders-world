@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, NgZone, ComponentRef, Injector, ComponentFactoryResolver, ApplicationRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, NgZone, ComponentRef, Injector, ComponentFactoryResolver, ApplicationRef, OnInit, AfterViewInit } from '@angular/core';
 import { } from 'googlemaps';
 import { ChkPtInfoWindowComponent } from './chk-pt-info-window/chk-pt-info-window.component';
 import { CustomMapControlComponent } from './custom-map-control/custom-map-control.component';
@@ -10,8 +10,9 @@ import { TransportEnum } from './shared/enums/transport-enum';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('map') mapElement: any;
+  @ViewChild('directionPanel') directionPanelElement: any;
   // @ViewChild('chkPtInfoWindow', {read: ElementRef}) chkPtinfoWindowElement: ElementRef;
   map: google.maps.Map;
   directionsService: google.maps.DirectionsService;
@@ -19,7 +20,9 @@ export class AppComponent implements OnInit {
   directionsRequest: google.maps.DirectionsRequest;
   directionsRendererOptions: google.maps.DirectionsRendererOptions;
   customMapControlCompRef: ComponentRef<CustomMapControlComponent>;
-  customMapControl: HTMLDivElement;
+  customMapControlDiv: HTMLDivElement;
+  transitLayer: google.maps.BicyclingLayer;
+  trafficLayer: google.maps.TrafficLayer;
   // info window content dynamically assigned and then appended to chkPtInfoWindow
   chkPtInfoWinCompRef: ComponentRef<ChkPtInfoWindowComponent>;
   chkPtInfoWindow: google.maps.InfoWindow;
@@ -75,14 +78,13 @@ export class AppComponent implements OnInit {
     const mapOptions: google.maps.MapOptions = {
       center: new google.maps.LatLng(this.checkPoints[0].lat, this.checkPoints[0].lng),
       zoom: 10,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      mapTypeId: google.maps.MapTypeId.TERRAIN,
       scaleControl: true
     };
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
     // custom map control
-    this.customMapControl = document.createElement('div');
-    this.zone.run(() => this.onCustomMapControlInit());
+    this.customMapControlDiv = document.createElement('div');
 
     // info window of marker
     this.chkPtInfoWindow = new google.maps.InfoWindow();
@@ -91,18 +93,32 @@ export class AppComponent implements OnInit {
     this.addCheckPointMarkesWithTimeout(800);
 
     // transit layer
-    const transitLayer = new google.maps.BicyclingLayer();
-    transitLayer.setMap(this.map);
+    this.transitLayer = new google.maps.BicyclingLayer();
+    this.transitLayer.setMap(null);
+
+    // traffic layer
+    this.trafficLayer = new google.maps.TrafficLayer();
+    this.trafficLayer.setMap(null);
 
     // directions service
     this.directionsService = new google.maps.DirectionsService();
     this.directionsRendererOptions = {
       // draggable: true,
       map: this.map,
-      suppressMarkers: true
+      suppressMarkers: true,
+      suppressPolylines: false,
+      suppressBicyclingLayer: true,
+      panel: this.directionPanelElement.nativeElement
     };
     this.directionsRenderer = new google.maps.DirectionsRenderer(this.directionsRendererOptions);
     this.calculateAndDisplayRoute(this.directionsService, this.directionsRenderer, this.getDirectionsRequest());
+  }
+
+  ngAfterViewInit() {
+    // this.zone.run(() => this.onCustomMapControlInit());
+    setTimeout(() => {
+      this.onCustomMapControlInit();
+    });
   }
 
   onCustomMapControlInit() {
@@ -112,16 +128,24 @@ export class AppComponent implements OnInit {
     const compFactory = this.resolver.resolveComponentFactory(CustomMapControlComponent);
     this.customMapControlCompRef = compFactory.create(this.injector);
     const inst = this.customMapControlCompRef.instance;
-    // inst.toggleChecked($event);
-    // inst.toggleChecked(!inst.googleMapRouteChecked);
 
     // parent-child communication
     const subscription = this.customMapControlCompRef.instance.onValueChanged.subscribe((updControlOptions: CustomMapControlComponent) => {
-      console.log(updControlOptions.googleMapRouteChecked);
+      this.directionsRendererOptions = {
+        map: this.map,
+        suppressMarkers: true,
+        suppressPolylines: !updControlOptions.googleMapRouteChecked,
+        suppressBicyclingLayer: !updControlOptions.bicycleRouteChecked
+      };
+      this.directionsRenderer.setOptions(this.directionsRendererOptions);
+      
+      this.trafficLayer.setMap(updControlOptions.trafficRouteChecked === true ? this.map : null);
+
+      console.log(updControlOptions);
     });
 
-    this.customMapControl.appendChild(this.customMapControlCompRef.location.nativeElement);
-    this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this.customMapControl);
+    this.customMapControlDiv.appendChild(this.customMapControlCompRef.location.nativeElement);
+    this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this.customMapControlDiv);
 
     this.appRef.attachView(this.customMapControlCompRef.hostView);
     this.customMapControlCompRef.onDestroy(() => {
@@ -129,7 +153,7 @@ export class AppComponent implements OnInit {
       subscription.unsubscribe();
     });
   }
-  
+
   // ngDoCheck() {
   //   console.log('parent ngDoCheck()');
   // }

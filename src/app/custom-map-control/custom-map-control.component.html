@@ -1,7 +1,5 @@
 <div>
-  <!-- <label name="checkbox" nz-checkbox [(ngModel)]="googleMapRouteChecked">Enable Google Map Route</label> -->
-  <nz-switch nzSize="small" [ngModel]="googleMapRouteChecked" (ngModelChange)="onGoogleMapRouteChange($event)"></nz-switch>
-  <!-- <input type="checkbox" [checked]="googleMapRouteChecked" (change)="updateControlOptions($event)">
-  <label>Enable Google Map Route</label> -->
-  <!-- Enable Google Map Route -->
+  <div><nz-switch nzSize="small" [ngModel]="googleMapRouteChecked" (ngModelChange)="onGoogleMapRouteOptChange($event)"></nz-switch>Google Map Suggested Cycling Route</div>
+  <div><nz-switch nzSize="small" [ngModel]="trafficRouteChecked" (ngModelChange)="onTrafficRouteOptChange($event)"></nz-switch>Road Traffic Info</div>
+  <div><nz-switch nzSize="small" [ngModel]="bicycleRouteChecked" (ngModelChange)="onBicycleRouteOptChange($event)"></nz-switch>Cycle Track</div>
 </div>
