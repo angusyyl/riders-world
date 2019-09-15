@@ -1,0 +1,23 @@
+<div class="wrapper">
+  <button nz-button nzType="primary" (click)="toggleCollapsed()">
+    <i nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+  </button>
+  <ul nz-menu nzMode="inline" nzTheme="light" [nzInlineCollapsed]="isCollapsed" [nzInlineIndent]="10" [style.display]="isCollapsed ? 'none' : 'block'">
+    <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Home' : ''" [routerLink]="['/post-list']">
+      <i nz-icon nzType="home"></i>
+      <span>Home</span>
+    </li>
+    <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Search' : ''" [routerLink]="['/search']">
+      <i nz-icon nzType="search"></i>
+      <span>Search</span>
+    </li>
+    <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Create' : ''">
+      <i nz-icon nzType="edit"></i>
+      <span>Create</span>
+    </li>
+    <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Setting' : ''" [routerLink]="['/setting']">
+      <i nz-icon nzType="setting"></i>
+      <span>Setting</span>
+    </li>
+  </ul>
+</div>

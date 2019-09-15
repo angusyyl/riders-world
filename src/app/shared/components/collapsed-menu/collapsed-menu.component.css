@@ -1,0 +1,11 @@
+.wrapper {
+  width: 100px;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 999;
+}
+
+button {
+  margin-bottom: 4px;
+}
