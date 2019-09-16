@@ -1,3 +1,8 @@
+<div *ngIf="posts">
+  <div *ngFor="let post of posts">
+    <img [src]="post.coverPhotoUrl"/>
+  </div>
+</div>
 <p>
   post-list works!
 </p>
