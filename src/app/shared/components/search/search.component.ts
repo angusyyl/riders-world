@@ -125,11 +125,12 @@ export class SearchComponent implements OnInit, AfterViewInit {
         map: this.map,
         suppressMarkers: true,
         suppressPolylines: !updControlOptions.googleMapRouteChecked,
-        suppressBicyclingLayer: !updControlOptions.bicycleRouteChecked
+        // suppressBicyclingLayer: !updControlOptions.bicycleRouteChecked
       };
       this.directionsRenderer.setOptions(this.directionsRendererOptions);
 
       this.trafficLayer.setMap(updControlOptions.trafficRouteChecked === true ? this.map : null);
+      this.transitLayer.setMap(updControlOptions.bicycleRouteChecked === true ? this.map : null);
 
       console.log(updControlOptions);
     });
