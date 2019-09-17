@@ -4,6 +4,10 @@ import { ChkPtInfoWindowComponent } from '../chk-pt-info-window/chk-pt-info-wind
 import { CustomMapControlComponent } from '../custom-map-control/custom-map-control.component';
 import { CHECKPOINTS } from 'src/app/mock-check-points';
 import { CheckPoint } from '../../models/check-point.model';
+import { TRIPS } from 'src/app/mock-trips';
+import { Trip } from '../../models/trip.model';
+import * as MarkerClusterer from '@google/markerclusterer';
+
 
 @Component({
   selector: 'app-search',
@@ -32,6 +36,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
   infoWinChkPtArrivalTimestamp: string;
   infoWinChkPtDepTimestamp: string;
 
+  // load trips
+  trips: Trip[] = TRIPS;
+
   // load check points
   checkPoints: CheckPoint[] = CHECKPOINTS;
 
@@ -43,6 +50,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
       scaledSize: new google.maps.Size(20, 32)
     }
   };
+
+  // hold trip markers
+  tripMarkers: google.maps.Marker[] = [];
 
   // hold check point markers
   checkPointMarkers: google.maps.Marker[] = [];
@@ -66,7 +76,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     // map
     const mapOptions: google.maps.MapOptions = {
       center: new google.maps.LatLng(this.checkPoints[0].lat, this.checkPoints[0].lng),
-      zoom: 10,
+      zoom: 2,
       mapTypeId: google.maps.MapTypeId.TERRAIN,
       scaleControl: true,
       mapTypeControl: false
@@ -79,8 +89,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
     // info window of marker
     this.chkPtInfoWindow = new google.maps.InfoWindow();
 
+    // add trip markers on map
+    this.addTripMarkers();
+
+    const markerCluster = new MarkerClusterer(this.map, this.tripMarkers,
+      {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
     // add check point markers on map
-    this.addCheckPointMarkesWithTimeout(800);
+    this.addCheckPointMarkes();
 
     // transit layer
     this.transitLayer = new google.maps.BicyclingLayer();
@@ -101,7 +117,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
       panel: this.directionPanelElement.nativeElement
     };
     this.directionsRenderer = new google.maps.DirectionsRenderer(this.directionsRendererOptions);
-    this.calculateAndDisplayRoute(this.directionsService, this.directionsRenderer, this.getDirectionsRequest());
+    // this.calculateAndDisplayRoute(this.directionsService, this.directionsRenderer, this.getDirectionsRequest());
   }
 
   ngAfterViewInit() {
@@ -209,14 +225,27 @@ export class SearchComponent implements OnInit, AfterViewInit {
     });
   }
 
+  addTripMarkers(): void {
+    for (const trip of this.trips) {
+      // create new marker for each check point
+      const marker = new google.maps.Marker(
+          {
+            position: { lat: trip.lat, lng: trip.lng },
+            map: this.map,
+            title: trip.name
+            // icon: this.icons.trip
+          }
+        );
+      this.tripMarkers.push(marker);
+    }
+  }
+
   /**
-   * create check point markers and display them consecutively
-   * @param timeout time in milliseconds between each marker displays
+   * create check point markers
    */
-  addCheckPointMarkesWithTimeout(timeout: number): void {
+  addCheckPointMarkes(): void {
     for (const chkPt of this.checkPoints) {
-      // window.setTimeout(() => {
-        // create new marker for each check point
+      // create new marker for each check point
       const marker = new google.maps.Marker(
           {
             position: { lat: chkPt.lat, lng: chkPt.lng },
@@ -248,7 +277,6 @@ export class SearchComponent implements OnInit, AfterViewInit {
         });
 
       this.checkPointMarkers.push(marker);
-      // }, i * timeout);
     }
   }
 

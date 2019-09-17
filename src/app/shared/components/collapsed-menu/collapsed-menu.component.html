@@ -2,8 +2,8 @@
   <button nz-button nzType="primary" (click)="toggleCollapsed()">
     <i nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
   </button>
-  <ul nz-menu nzMode="inline" nzTheme="light" [nzInlineCollapsed]="isCollapsed" [nzInlineIndent]="10" [style.display]="isCollapsed ? 'none' : 'block'">
-    <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Home' : ''" [routerLink]="['/post-list']">
+  <ul nz-menu nzMode="inline" nzTheme="light" [nzInlineCollapsed]="isCollapsed" [nzInlineIndent]="10" *ngIf="!isCollapsed">
+    <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Home' : ''" [routerLink]="['/post-list']" [nzSelected]="true">
       <i nz-icon nzType="home"></i>
       <span>Home</span>
     </li>

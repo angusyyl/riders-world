@@ -11,6 +11,7 @@ export class CheckPoint {
   routeType: string; // trip or bike
   arrivalTransport: TransportEnum;
   depTransport: TransportEnum;
+  tripId: number;
   // createdDate: string;
   // updatedDate: string;
   // weather: string;

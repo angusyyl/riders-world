@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { PostService } from '../../services/post.service';
 import { Post } from '../../models/post.model';
 
@@ -10,10 +10,14 @@ import { Post } from '../../models/post.model';
 export class PostListComponent implements OnInit {
 
   posts: Post[];
+  innerWidth: number;
+  innerHeight: number;
 
   constructor(private postService: PostService) { }
 
   ngOnInit() {
+    this.innerWidth = window.innerWidth;
+    this.innerHeight = window.innerHeight;
     this.posts = this.getPosts();
   }
 
@@ -21,4 +25,11 @@ export class PostListComponent implements OnInit {
     return this.postService.getPosts();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.innerWidth = window.innerWidth;
+    this.innerHeight = window.innerHeight;
+    console.log(this.innerWidth);
+    console.log(this.innerHeight);
+  }
 }
