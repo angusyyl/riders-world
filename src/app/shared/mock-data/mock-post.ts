@@ -1,4 +1,4 @@
-import { Post } from './shared/models/post.model';
+import { Post } from '../models/post.model';
 
 export const POSTS: Post[] = [
     {coverPhotoUrl: '../assets/images/post-covers/china.jpg'},

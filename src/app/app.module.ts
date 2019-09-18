@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,7 +15,6 @@ import { PostListComponent } from './shared/components/post-list/post-list.compo
 import { SearchComponent } from './shared/components/search/search.component';
 import { SettingComponent } from './shared/components/setting/setting.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +28,7 @@ import { SettingComponent } from './shared/components/setting/setting.component'
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FormsModule,
     MaterialModule,
     AntDesignModule,

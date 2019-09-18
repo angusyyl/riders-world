@@ -1,4 +1,4 @@
-import { Trip } from './shared/models/trip.model';
+import { Trip } from '../models/trip.model';
 
 export const TRIPS: Trip[] = [
   {

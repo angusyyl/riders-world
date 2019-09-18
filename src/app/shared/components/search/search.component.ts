@@ -2,11 +2,12 @@ import { Component, ViewChild, ElementRef, NgZone, ComponentRef, Injector, Compo
 import { } from 'googlemaps';
 import { ChkPtInfoWindowComponent } from '../chk-pt-info-window/chk-pt-info-window.component';
 import { CustomMapControlComponent } from '../custom-map-control/custom-map-control.component';
-import { CHECKPOINTS } from 'src/app/mock-check-points';
+import { CHECKPOINTS } from 'src/app/shared/mock-data/mock-check-points';
 import { CheckPoint } from '../../models/check-point.model';
-import { TRIPS } from 'src/app/mock-trips';
+import { TRIPS } from 'src/app/shared/mock-data/mock-trips';
 import { Trip } from '../../models/trip.model';
 import * as MarkerClusterer from '@google/markerclusterer';
+import { CheckPointService } from './../../services/check-point.service';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   trips: Trip[] = TRIPS;
 
   // load check points
-  checkPoints: CheckPoint[] = CHECKPOINTS;
+  // checkPoints: CheckPoint[] = CHECKPOINTS;
 
   icons = {
     chkPt: {
@@ -62,9 +63,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
   // }
 
   constructor(private injector: Injector,
-              private resolver: ComponentFactoryResolver,
-              private appRef: ApplicationRef,
-              private zone: NgZone) {
+    private resolver: ComponentFactoryResolver,
+    private appRef: ApplicationRef,
+    private zone: NgZone,
+    private _checkPointService: CheckPointService) {
   }
 
   /**
@@ -75,7 +77,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
     // map
     const mapOptions: google.maps.MapOptions = {
-      center: new google.maps.LatLng(this.checkPoints[0].lat, this.checkPoints[0].lng),
+      center: new google.maps.LatLng(14.5617, 121.0214),
       zoom: 2,
       mapTypeId: google.maps.MapTypeId.TERRAIN,
       scaleControl: true,
@@ -93,10 +95,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.addTripMarkers();
 
     const markerCluster = new MarkerClusterer(this.map, this.tripMarkers,
-      {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+      { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
 
     // add check point markers on map
-    this.addCheckPointMarkes();
+    // this.addCheckPointMarkes();
 
     // transit layer
     this.transitLayer = new google.maps.BicyclingLayer();
@@ -117,7 +119,6 @@ export class SearchComponent implements OnInit, AfterViewInit {
       panel: this.directionPanelElement.nativeElement
     };
     this.directionsRenderer = new google.maps.DirectionsRenderer(this.directionsRendererOptions);
-    // this.calculateAndDisplayRoute(this.directionsService, this.directionsRenderer, this.getDirectionsRequest());
   }
 
   ngAfterViewInit() {
@@ -195,6 +196,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   getDirectionsRequest(): google.maps.DirectionsRequest {
+    console.log('called getDirectionsRequest');
     const wayPts = this.checkPointMarkers.slice(1, this.checkPointMarkers.length - 1);
     const directionsWaypoints = [];
     for (const wayPt of wayPts) {
@@ -215,9 +217,17 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   // tslint:disable-next-line: max-line-length
+  /**
+   * Set directions on map
+   * @param directionsService 
+   * @param directionsRenderer 
+   * @param directionsReq 
+   */
   calculateAndDisplayRoute(directionsService: google.maps.DirectionsService, directionsRenderer: google.maps.DirectionsRenderer, directionsReq: google.maps.DirectionsRequest) {
+    console.log('called calculateAndDisplayRoute');
     directionsService.route(directionsReq, (resp, status) => {
       if (status === google.maps.DirectionsStatus.OK) {
+        directionsRenderer.setMap(this.map);
         directionsRenderer.setDirections(resp);
       } else {
         window.alert('Directions request failed due to ' + status);
@@ -225,59 +235,116 @@ export class SearchComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * create trip markers
+   */
   addTripMarkers(): void {
     for (const trip of this.trips) {
-      // create new marker for each check point
+      // create new marker for each trip
       const marker = new google.maps.Marker(
-          {
-            position: { lat: trip.lat, lng: trip.lng },
-            map: this.map,
-            title: trip.name
-            // icon: this.icons.trip
+        {
+          position: { lat: trip.lat, lng: trip.lng },
+          map: this.map,
+          title: trip.name
+          // icon: this.icons.trip
+        }
+      );
+
+      // add click event listener to trip marker
+      marker.addListener('click', () => {
+        // get check points of the trip from Http Request
+        let chkPts: CheckPoint[] = [];
+        const chkPtSubscription = this._checkPointService.getCheckPoints(trip.id).subscribe(
+          response => {
+            for (const obj of response) {
+              chkPts.push({
+                id: obj.id,
+                lat: obj.lat,
+                lng: obj.lng,
+                name: obj.name,
+                arrivalTimestamp: obj.arrivalTimestamp,
+                depTimestamp: obj.depTimestamp,
+                locale: obj.locale,
+                routeType: obj.routeType,
+                arrivalTransport: obj.arrivalTransport,
+                depTransport: obj.depTransport,
+                tripId: obj.tripId
+              });
+            };
+            console.log(JSON.stringify(chkPts));
+          },
+          errorMsg => console.log('Error Msg: ' + errorMsg),
+          () => {
+            this.removeAllCheckPointMarkers();
+            this.removeRenderedDirections();
+            this.addCheckPointMarkes(chkPts);
+            // render direction route on map
+            this.calculateAndDisplayRoute(this.directionsService, this.directionsRenderer, this.getDirectionsRequest());
           }
         );
+      });
       this.tripMarkers.push(marker);
     }
   }
 
   /**
-   * create check point markers
+   * remove rendered directions from the map
    */
-  addCheckPointMarkes(): void {
-    for (const chkPt of this.checkPoints) {
+  removeRenderedDirections() {
+    this.directionsRenderer.setMap(null);
+  }
+
+  /**
+   * clear all check point markers on the map
+   */
+  removeAllCheckPointMarkers(): void {
+    this.checkPointMarkers.map((marker: google.maps.Marker) => {
+      marker.setMap(null);
+    });
+    this.checkPointMarkers.length = 0;
+  }
+
+  /**
+   * create check point markers for a viewed trip
+   * @param checkPoints check points belong to a trip being viewed
+   */
+  addCheckPointMarkes(checkPoints: CheckPoint[]): void {
+    for (const chkPt of checkPoints) {
       // create new marker for each check point
       const marker = new google.maps.Marker(
-          {
-            position: { lat: chkPt.lat, lng: chkPt.lng },
-            map: this.map,
-            title: chkPt.name,
-            // animation: google.maps.Animation.DROP,
-            draggable: true,
-            icon: this.icons.chkPt
-          }
-        );
+        {
+          position: { lat: chkPt.lat, lng: chkPt.lng },
+          map: this.map,
+          title: chkPt.name,
+          // animation: google.maps.Animation.DROP,
+          draggable: true,
+          icon: this.icons.chkPt
+        }
+      );
 
-        // add click event listener to marker
+      // add click event listener to marker
       marker.addListener('click', () => {
-          this.zone.run(() => this.onCheckPointMarkerClick(marker, chkPt));
-          this.markerBounceStart(marker);
-        });
+        this.zone.run(() => this.onCheckPointMarkerClick(marker, chkPt));
+        this.markerBounceStart(marker);
+      });
 
-        // add position changed event listener to marker
+      // add position changed event listener to marker
       marker.addListener('dragend', () => {
-          this.zone.run(() => {
-            this.onCheckPointMarkerDragend(marker, chkPt);
-          });
+        this.zone.run(() => {
+          this.onCheckPointMarkerDragend(marker, chkPt);
         });
+      });
 
-        // add close click event listener to info window
+      // add close click event listener to info window
       this.chkPtInfoWindow.addListener('closeclick', _ => {
-          this.markerBounceStop(marker);
-          this.chkPtInfoWinCompRef.destroy();
-        });
+        this.markerBounceStop(marker);
+        this.chkPtInfoWinCompRef.destroy();
+      });
 
       this.checkPointMarkers.push(marker);
     }
+
+    console.log('Number of check point markers: ' + this.checkPointMarkers.length);
   }
 
   /**
@@ -298,11 +365,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
     // parent-child communication
     const subscription = this.chkPtInfoWinCompRef.instance.onValueChanged.subscribe((updChkPt: ChkPtInfoWindowComponent) => {
-      this.checkPoints.filter(currChkPt => currChkPt.id === updChkPt.id).map(filteredChkPt => {
-        filteredChkPt.name = updChkPt.name;
-        filteredChkPt.arrivalTimestamp = updChkPt.arrivalTimestamp;
-        filteredChkPt.depTimestamp = updChkPt.depTimestamp;
-      });
+      chkPt.name = updChkPt.name;
+      chkPt.arrivalTimestamp = updChkPt.arrivalTimestamp;
+      chkPt.depTimestamp = updChkPt.depTimestamp;
     });
 
     // set info window content to the dynamically created component
