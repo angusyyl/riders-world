@@ -73,7 +73,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
    * initalize map
    */
   ngOnInit(): void {
-    console.log('parent ngDoCheck()');
+    console.log('parent ngOnInit()');
 
     // map
     const mapOptions: google.maps.MapOptions = {
@@ -144,7 +144,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
         suppressPolylines: !updControlOptions.googleMapRouteChecked,
         // suppressBicyclingLayer: !updControlOptions.bicycleRouteChecked
       };
+      console.log(this.directionsRendererOptions);
       this.directionsRenderer.setOptions(this.directionsRendererOptions);
+      console.log(this.directionsRenderer);
 
       this.trafficLayer.setMap(updControlOptions.trafficRouteChecked === true ? this.map : null);
       this.transitLayer.setMap(updControlOptions.bicycleRouteChecked === true ? this.map : null);
@@ -219,17 +221,17 @@ export class SearchComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line: max-line-length
   /**
    * Set directions on map
-   * @param directionsService 
-   * @param directionsRenderer 
-   * @param directionsReq 
+   * @param directionsReq direction request
    */
-  calculateAndDisplayRoute(directionsService: google.maps.DirectionsService, directionsRenderer: google.maps.DirectionsRenderer, directionsReq: google.maps.DirectionsRequest) {
+  calculateAndDisplayRoute(directionsReq: google.maps.DirectionsRequest) {
     console.log('called calculateAndDisplayRoute');
-    directionsService.route(directionsReq, (resp, status) => {
+    this.directionsService.route(directionsReq, (resp, status) => {
       if (status === google.maps.DirectionsStatus.OK) {
-        directionsRenderer.setMap(this.map);
-        directionsRenderer.setDirections(resp);
+        this.directionsRenderer.setMap(this.map);
+        this.directionsRenderer.setDirections(resp);
       } else {
+        this.directionsRenderer.setMap(null);
+        this.directionsRenderer.setDirections({geocoded_waypoints: [], routes: []});
         window.alert('Directions request failed due to ' + status);
       }
     });
@@ -253,7 +255,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
       // add click event listener to trip marker
       marker.addListener('click', () => {
         // get check points of the trip from Http Request
-        let chkPts: CheckPoint[] = [];
+        const chkPts: CheckPoint[] = [];
         const chkPtSubscription = this._checkPointService.getCheckPoints(trip.id).subscribe(
           response => {
             for (const obj of response) {
@@ -270,16 +272,16 @@ export class SearchComponent implements OnInit, AfterViewInit {
                 depTransport: obj.depTransport,
                 tripId: obj.tripId
               });
-            };
+            }
             console.log(JSON.stringify(chkPts));
           },
-          errorMsg => console.log('Error Msg: ' + errorMsg),
+          errorMsg => console.error('Error Msg: ' + errorMsg),
           () => {
             this.removeAllCheckPointMarkers();
             this.removeRenderedDirections();
             this.addCheckPointMarkes(chkPts);
             // render direction route on map
-            this.calculateAndDisplayRoute(this.directionsService, this.directionsRenderer, this.getDirectionsRequest());
+            this.calculateAndDisplayRoute(this.getDirectionsRequest());
           }
         );
       });
@@ -391,7 +393,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
   onCheckPointMarkerDragend(marker: google.maps.Marker, chkPt: CheckPoint) {
     chkPt.lat = marker.getPosition().lat();
     chkPt.lng = marker.getPosition().lng();
-    this.calculateAndDisplayRoute(this.directionsService, this.directionsRenderer, this.getDirectionsRequest());
+    this.calculateAndDisplayRoute(this.getDirectionsRequest());
 
     // console.log(chkPt);
   }
