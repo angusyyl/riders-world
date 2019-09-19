@@ -37,6 +37,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
   infoWinChkPtArrivalTimestamp: string;
   infoWinChkPtDepTimestamp: string;
 
+  TRIP_MARKER_TITLE: string = 'Click to display trip route(s)';
+  CHECK_POINT_MARKER_TITLE: string = 'Drag to change location or click to see details';
+
   // load trips
   trips: Trip[] = TRIPS;
 
@@ -247,7 +250,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
         {
           position: { lat: trip.lat, lng: trip.lng },
           map: this.map,
-          title: trip.name
+          title: this.TRIP_MARKER_TITLE
           // icon: this.icons.trip
         }
       );
@@ -317,7 +320,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
         {
           position: { lat: chkPt.lat, lng: chkPt.lng },
           map: this.map,
-          title: chkPt.name,
+          title: this.CHECK_POINT_MARKER_TITLE,
           // animation: google.maps.Animation.DROP,
           draggable: true,
           icon: this.icons.chkPt

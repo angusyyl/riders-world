@@ -1,5 +1,6 @@
 import { Component, EventEmitter } from '@angular/core';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { SwiperOptions } from 'swiper';
 
 @Component({
   selector: 'app-chk-pt-info-window',
@@ -14,8 +15,32 @@ export class ChkPtInfoWindowComponent {
   private _depTimestamp: Date;
 
   onValueChanged = new EventEmitter();
+  
+  // swiper component
+  public swiperConfig: SwiperOptions = {
+    pagination: { el: '.swiper-pagination', clickable: true },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev'
+    },
+    spaceBetween: 30,
+    effect: 'fade'
+    //lazy: true
+  };
+  imageUrls: string[] = [];
+  imageStyle: any;
+  swiperPanelActive: boolean = false;
 
   constructor() { }
+
+  ngOnInit(): void {
+    console.log('ChkPtInfoWindowComponent ngOnInit()');
+    this.imageUrls.push('/assets/images/post-cvoer/china.jpg');
+    this.imageUrls.push('assets/images/post-cvoer/japan.jpg');
+    this.imageUrls.push('assets/images/post-cvoer/korea.jpg');
+    this.imageUrls.push('assets/images/post-cvoer/thailand.jpg');
+
+  }
 
   get id(): number {
     return this._id;
@@ -72,10 +97,6 @@ export class ChkPtInfoWindowComponent {
   //   console.log('child ChkPtInfoWindowComponent ngOnChanges()');
   // }
 
-  // ngOnInit(): void {
-  //   console.log('child ChkPtInfoWindowComponent ngOnInit()');
-  // }
-
   // ngDoCheck() {
   //   console.log('child ChkPtInfoWindowComponent ngDoCheck()');
   // }
@@ -92,9 +113,10 @@ export class ChkPtInfoWindowComponent {
   //   console.log('child ChkPtInfoWindowComponent ngAfterViewInit()');
   // }
 
-  // ngAfterViewChecked(){
-  //   console.log('child ChkPtInfoWindowComponent ngAfterViewChecked()');
-  // }
+  ngAfterViewChecked(){
+    console.log('ChkPtInfoWindowComponent ngAfterViewChecked()');
+    this.swiperPanelActive = true;
+  }
 
   showCheckPointDetail(): void {
     console.log('showCheckPointDetail being clicked');

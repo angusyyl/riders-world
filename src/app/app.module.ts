@@ -14,6 +14,7 @@ import { CollapsedMenuComponent } from './shared/components/collapsed-menu/colla
 import { PostListComponent } from './shared/components/post-list/post-list.component';
 import { SearchComponent } from './shared/components/search/search.component';
 import { SettingComponent } from './shared/components/setting/setting.component';
+import { NgxUsefulSwiperModule } from 'node_modules/ngx-useful-swiper';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { SettingComponent } from './shared/components/setting/setting.component'
     FormsModule,
     MaterialModule,
     AntDesignModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxUsefulSwiperModule
   ],
   entryComponents: [
     ChkPtInfoWindowComponent,

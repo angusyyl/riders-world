@@ -29,7 +29,8 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
+              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
+              "./node_modules/swiper/dist/css/swiper.css"
             ],
             "scripts": [],
             "es5BrowserSupport": true

@@ -1,10 +1,7 @@
 import { TransportEnum } from '../enums/transport-enum';
+import { Marker } from './marker.model';
 
-export class CheckPoint {
-  id: number;
-  lat: number;
-  lng: number;
-  name?: string;
+export class CheckPoint extends Marker {
   arrivalTimestamp?: Date;
   depTimestamp?: Date;
   locale?: string;

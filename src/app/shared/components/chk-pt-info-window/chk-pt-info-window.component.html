@@ -22,5 +22,16 @@ nzFormat="yyyy-MM-dd HH:mm"
 (nzOnOk)="onTimestampChange($event)"
 ></nz-range-picker>
 
+<swiper [config]="swiperConfig" [initialize]="swiperPanelActive">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide" *ngFor="let imageUrl of imageUrls" [style.background-image]="'url(' + imageUrl + ')'"></div>
+  </div>
+  <!-- Add Pagination -->
+  <div class="swiper-pagination"></div>
+  <!-- Add Arrows -->
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+</swiper>
+
 <div><button class="mat-raised-button mat-warn" color="warn" (click)="showCheckPointDetail()">Details</button></div>
 <!-- <div><button (click)="showCheckPointDetail()">Details</button></div> -->

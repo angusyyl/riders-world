@@ -4,3 +4,15 @@ nz-range-picker,
 nz-week-picker {
   margin: 0 8px 12px 0;
 }
+swiper {
+  height: 300px;
+  width: 400px;
+}
+.swiper-container {
+  width: 100%;
+  height: 100%;
+}
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+}
