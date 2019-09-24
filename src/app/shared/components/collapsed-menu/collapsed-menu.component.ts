@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { UserInfoComponent } from '../user-info/user-info.component';
 
 @Component({
   selector: 'app-collapsed-menu',
@@ -9,12 +11,19 @@ export class CollapsedMenuComponent implements OnInit {
 
   isCollapsed = false;
 
-  constructor() { }
+  constructor(private modalService: NzModalService) { }
 
   ngOnInit() {
   }
 
   toggleCollapsed(): void {
     this.isCollapsed = !this.isCollapsed;
+  }
+
+  showUserInfoModal(): void {
+    this.modalService.create({
+      nzContent: UserInfoComponent,
+      nzWrapClassName: "vertical-center-modal"
+    });
   }
 }

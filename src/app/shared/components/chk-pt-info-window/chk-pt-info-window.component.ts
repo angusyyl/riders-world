@@ -29,17 +29,18 @@ export class ChkPtInfoWindowComponent {
   };
   imageUrls: string[] = [];
   imageStyle: any;
-  swiperPanelActive: boolean = false;
 
   constructor() { }
 
   ngOnInit(): void {
     console.log('ChkPtInfoWindowComponent ngOnInit()');
-    this.imageUrls.push('/assets/images/post-cvoer/china.jpg');
-    this.imageUrls.push('assets/images/post-cvoer/japan.jpg');
-    this.imageUrls.push('assets/images/post-cvoer/korea.jpg');
-    this.imageUrls.push('assets/images/post-cvoer/thailand.jpg');
-
+    this.imageUrls.push('https://www.dublincycling.com/sites/dublincycling.com/files/styles/flexslider_full/public/images/img_7959.jpg?itok=y8qaScM_');
+    this.imageUrls.push('https://i2-prod.dublinlive.ie/incoming/article11972378.ece/ALTERNATES/s615/90338490.jpg');
+    this.imageUrls.push('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIOteSUHp5m0Gqm8VmzTi-ktVd9Oq1a0Nr3gucrLuk_Ca0BQVm');
+    this.imageUrls.push('assets/images/post-covers/china.jpg');
+    this.imageUrls.push('assets/images/post-covers/japan.jpg');
+    this.imageUrls.push('assets/images/post-covers/korea.jpg');
+    this.imageUrls.push('assets/images/post-covers/thailand.jpg');
   }
 
   get id(): number {
@@ -94,33 +95,32 @@ export class ChkPtInfoWindowComponent {
   }
 
   // ngOnChanges()	{
-  //   console.log('child ChkPtInfoWindowComponent ngOnChanges()');
+  //   console.log('ChkPtInfoWindowComponent ngOnChanges()');
   // }
 
   // ngDoCheck() {
-  //   console.log('child ChkPtInfoWindowComponent ngDoCheck()');
+  //   console.log('ChkPtInfoWindowComponent ngDoCheck()');
   // }
 
   // ngAfterContentInit() {
-  //   console.log('child ChkPtInfoWindowComponent ngAfterContentInit()');
+  //   console.log('ChkPtInfoWindowComponent ngAfterContentInit()');
   // }
 
   // ngAfterContentChecked() {
-  //   console.log('child ChkPtInfoWindowComponent ngAfterContentChecked()');
+  //   console.log('ChkPtInfoWindowComponent ngAfterContentChecked()');
   // }
 
   // ngAfterViewInit() {
-  //   console.log('child ChkPtInfoWindowComponent ngAfterViewInit()');
+  //   console.log('ChkPtInfoWindowComponent ngAfterViewInit()');
   // }
 
-  ngAfterViewChecked(){
-    console.log('ChkPtInfoWindowComponent ngAfterViewChecked()');
-    this.swiperPanelActive = true;
-  }
+  // ngAfterViewChecked(){
+  //   console.log('ChkPtInfoWindowComponent ngAfterViewChecked()');
+  // }
 
-  showCheckPointDetail(): void {
-    console.log('showCheckPointDetail being clicked');
-  }
+  // showCheckPointDetail(): void {
+  //   console.log('showCheckPointDetail being clicked');
+  // }
 
   updateChkPtInfo() {
     this.onValueChanged.emit({id: this._id, name: this._name, arrivalTimestamp: this._arrivalTimestamp, depTimestamp: this._depTimestamp});

@@ -22,7 +22,7 @@ nzFormat="yyyy-MM-dd HH:mm"
 (nzOnOk)="onTimestampChange($event)"
 ></nz-range-picker>
 
-<swiper [config]="swiperConfig" [initialize]="swiperPanelActive">
+<swiper [config]="swiperConfig">
   <div class="swiper-wrapper">
     <div class="swiper-slide" *ngFor="let imageUrl of imageUrls" [style.background-image]="'url(' + imageUrl + ')'"></div>
   </div>

@@ -1,0 +1,14 @@
+<nz-modal [nzTitle]="title" nzVisible="true" (nzOnCancel)="destroyModal()" [nzFooter]=null nzWrapClassName="vertical-center-modal">
+  <ng-container *ngIf="loggedIn else signin">
+    <div>{{username}}</div>
+  </ng-container>
+  <!-- <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">Login</button>
+  </div> -->
+</nz-modal>
+
+<ng-template #signin>
+  <div>pls sign in</div>
+  <a [routerLink]="['/signup']">No account yet? Click to Sign Up</a>
+  <router-outlet></router-outlet>
+</ng-template>

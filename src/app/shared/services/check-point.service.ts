@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CheckPoint } from '../models/check-point.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, retry } from 'rxjs/operators';
 import { throwError as observableThrowError, Observable } from 'rxjs';
 
 @Injectable({
@@ -24,7 +24,7 @@ export class CheckPointService {
     } else {
       this._url = this._url5;
     }
-    return this.http.get<[]>(this._url).pipe(catchError(this.errorHandler));
+    return this.http.get<[]>(this._url).pipe(retry(3), catchError(this.errorHandler));
   }
 
   private errorHandler(error: HttpErrorResponse) {

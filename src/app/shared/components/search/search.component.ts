@@ -52,6 +52,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
       // url: './assets/images/bicycle-rider.svg',
       // This marker is 20 pixels wide by 32 pixels high.
       scaledSize: new google.maps.Size(20, 32)
+    },
+    trip: {
+      url: '/assets/images/trip-icon.png',
+      scaledSize: new google.maps.Size(12.7, 9.5)
     }
   };
 
@@ -84,7 +88,16 @@ export class SearchComponent implements OnInit, AfterViewInit {
       zoom: 2,
       mapTypeId: google.maps.MapTypeId.TERRAIN,
       scaleControl: true,
-      mapTypeControl: false
+      mapTypeControl: false,
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.RIGHT_BOTTOM
+      },
+      streetViewControlOptions: {
+        position: google.maps.ControlPosition.RIGHT_BOTTOM
+      },
+      fullscreenControlOptions: {
+        position: google.maps.ControlPosition.RIGHT_BOTTOM
+      }
     };
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
@@ -137,10 +150,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
     // dynamic creation of custom map control component, CustomMapControlComponent should be declared in entryComponents
     const compFactory = this.resolver.resolveComponentFactory(CustomMapControlComponent);
     this.customMapControlCompRef = compFactory.create(this.injector);
-    const inst = this.customMapControlCompRef.instance;
+    const instance = this.customMapControlCompRef.instance;
 
     // parent-child communication
-    const subscription = this.customMapControlCompRef.instance.onValueChanged.subscribe((updControlOptions: CustomMapControlComponent) => {
+    const subscription = instance.onValueChanged.subscribe((updControlOptions: CustomMapControlComponent) => {
       this.directionsRendererOptions = {
         map: this.map,
         suppressMarkers: true,
@@ -158,7 +171,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     });
 
     this.customMapControlDiv.appendChild(this.customMapControlCompRef.location.nativeElement);
-    this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(this.customMapControlDiv);
+    this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(this.customMapControlDiv);
 
     this.appRef.attachView(this.customMapControlCompRef.hostView);
     this.customMapControlCompRef.onDestroy(() => {

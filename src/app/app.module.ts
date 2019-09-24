@@ -15,6 +15,8 @@ import { PostListComponent } from './shared/components/post-list/post-list.compo
 import { SearchComponent } from './shared/components/search/search.component';
 import { SettingComponent } from './shared/components/setting/setting.component';
 import { NgxUsefulSwiperModule } from 'node_modules/ngx-useful-swiper';
+import { UserInfoComponent } from './shared/components/user-info/user-info.component';
+import { SignupComponent } from './shared/components/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { NgxUsefulSwiperModule } from 'node_modules/ngx-useful-swiper';
     CollapsedMenuComponent,
     PostListComponent,
     SearchComponent,
-    SettingComponent
+    SettingComponent,
+    UserInfoComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +42,8 @@ import { NgxUsefulSwiperModule } from 'node_modules/ngx-useful-swiper';
   ],
   entryComponents: [
     ChkPtInfoWindowComponent,
-    CustomMapControlComponent
+    CustomMapControlComponent,
+    UserInfoComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

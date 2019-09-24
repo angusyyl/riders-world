@@ -1,5 +1,16 @@
-<div>
-  <div><nz-switch nzSize="small" [ngModel]="googleMapRouteChecked" (ngModelChange)="onGoogleMapRouteOptChange($event)"></nz-switch>Google Map Suggested Cycling Route</div>
-  <div><nz-switch nzSize="small" [ngModel]="trafficRouteChecked" (ngModelChange)="onTrafficRouteOptChange($event)"></nz-switch>Road Traffic Info</div>
-  <div><nz-switch nzSize="small" [ngModel]="bicycleRouteChecked" (ngModelChange)="onBicycleRouteOptChange($event)"></nz-switch>Cycle Track</div>
+<div class="outer">
+  <div class="inner">
+    <div class="control">
+      <nz-switch nzSize="small" [ngModel]="googleMapRouteChecked" (ngModelChange)="onGoogleMapRouteOptChange($event)">
+      </nz-switch> Google Map Suggested Cycling Route
+    </div>
+    <div class="control">
+      <nz-switch nzSize="small" [ngModel]="trafficRouteChecked" (ngModelChange)="onTrafficRouteOptChange($event)">
+      </nz-switch> Road Traffic Info
+    </div>
+    <div class="control">
+      <nz-switch nzSize="small" [ngModel]="bicycleRouteChecked" (ngModelChange)="onBicycleRouteOptChange($event)">
+      </nz-switch> Cycle Track
+    </div>
+  </div>
 </div>
