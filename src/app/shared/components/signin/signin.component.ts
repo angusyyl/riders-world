@@ -3,9 +3,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AuthenticationService } from '../../services'
+import { AuthenticationService } from '../../services';
 
-@Component({templateUrl: 'signin.component.html'})
+@Component({
+  selector: 'app-signin',
+  templateUrl: './signin.component.html',
+  styleUrls: ['./signin.component.css']
+})
 export class SigninComponent implements OnInit {
     loginForm: FormGroup;
     loading = false;
@@ -20,7 +24,7 @@ export class SigninComponent implements OnInit {
         private authenticationService: AuthenticationService
     ) {
         // redirect to home if already logged in
-        if (this.authenticationService.currentUserValue) { 
+        if (this.authenticationService.currentUserValue) {
             this.router.navigate(['/']);
         }
     }

@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: 'post-list', component: PostListComponent },
   { path: 'setting', component: SettingComponent },
-  { path: 'signup', component: SignupComponent },   
+  { path: 'signup', component: SignupComponent },
   { path: 'signin', component: SigninComponent },
   { path: 'user-info', component: UserInfoComponent, canActivate: [AuthGuard] },
   // otherwise redirect to home
