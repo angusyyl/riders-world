@@ -4,7 +4,7 @@ import { ChkPtInfoWindowComponent } from '../chk-pt-info-window/chk-pt-info-wind
 import { CustomMapControlComponent } from '../custom-map-control/custom-map-control.component';
 import { CHECKPOINTS } from 'src/app/shared/mock-data/mock-check-points';
 import { CheckPoint } from '../../models/check-point.model';
-import { TRIPS } from 'src/app/shared/mock-data/mock-trips';
+import { TRIPS } from '../../mock-data/mock-trips';
 import { Trip } from '../../models/trip.model';
 import * as MarkerClusterer from '@google/markerclusterer';
 import { CheckPointService } from './../../services/check-point.service';

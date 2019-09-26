@@ -1,12 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChkPtInfoWindowComponent } from './shared/components/chk-pt-info-window/chk-pt-info-window.component';
 import { MaterialModule } from './material-module/material-module.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AntDesignModule } from './material-module/ant-design.module';
 import { CustomMapControlComponent } from './shared/components/custom-map-control/custom-map-control.component';
@@ -14,9 +14,11 @@ import { CollapsedMenuComponent } from './shared/components/collapsed-menu/colla
 import { PostListComponent } from './shared/components/post-list/post-list.component';
 import { SearchComponent } from './shared/components/search/search.component';
 import { SettingComponent } from './shared/components/setting/setting.component';
-import { NgxUsefulSwiperModule } from 'node_modules/ngx-useful-swiper';
+import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { UserInfoComponent } from './shared/components/user-info/user-info.component';
 import { SignupComponent } from './shared/components/signup/signup.component';
+import { fakeBackendProvider, JwtInterceptor, ErrorInterceptor } from './shared/helpers';
+import { SigninComponent } from './shared/components/signin/signin.component';
 
 @NgModule({
   declarations: [
@@ -28,12 +30,14 @@ import { SignupComponent } from './shared/components/signup/signup.component';
     SearchComponent,
     SettingComponent,
     UserInfoComponent,
-    SignupComponent
+    SignupComponent,
+    SigninComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    ReactiveFormsModule,
     FormsModule,
     MaterialModule,
     AntDesignModule,
@@ -45,7 +49,11 @@ import { SignupComponent } from './shared/components/signup/signup.component';
     CustomMapControlComponent,
     UserInfoComponent
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    fakeBackendProvider
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

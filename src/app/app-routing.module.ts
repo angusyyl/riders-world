@@ -4,14 +4,20 @@ import { PostListComponent } from './shared/components/post-list/post-list.compo
 import { SearchComponent } from './shared/components/search/search.component';
 import { SettingComponent } from './shared/components/setting/setting.component';
 import { SignupComponent } from './shared/components/signup/signup.component';
+import { SigninComponent } from './shared/components/signin/signin.component';
+import { UserInfoComponent } from './shared/components/user-info/user-info.component';
+import { AuthGuard } from './shared/helpers';
 
 const routes: Routes = [
   { path: '', redirectTo: '/search', pathMatch: 'full' },
   { path: 'search', component: SearchComponent },
   { path: 'post-list', component: PostListComponent },
-  { path: 'post-list', component: PostListComponent },
   { path: 'setting', component: SettingComponent },
-  { path: 'signup', component: SignupComponent }
+  { path: 'signup', component: SignupComponent },   
+  { path: 'signin', component: SigninComponent },
+  { path: 'user-info', component: UserInfoComponent, canActivate: [AuthGuard] },
+  // otherwise redirect to home
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
