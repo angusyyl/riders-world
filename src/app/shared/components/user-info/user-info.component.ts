@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../../services';
 
 @Component({
   selector: 'app-user-info',
@@ -9,18 +11,23 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 export class UserInfoComponent implements OnInit {
 
   title: string;
-  loggedIn: boolean = false;
-  username: string = "hi Rider King";
+  currentUser: any;
+  username = 'hi Rider King';
   password: string;
-  profilePic: ImageData
+  profilePic: ImageData;
 
-  constructor(private modal: NzModalRef) { }
+  constructor(private modal: NzModalRef,
+              private router: Router,
+              private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
-    if (this.loggedIn) {
+
+    const currentUser = this.authenticationService.currentUserValue;
+    if (currentUser) {
       this.title = 'Profile';
     } else {
-      this.title = 'Sign Up/ Sign In';
+      // not logged in so redirect to signin page with the return url
+      this.router.navigate(['/signin']);
     }
   }
 

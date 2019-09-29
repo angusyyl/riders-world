@@ -23,7 +23,7 @@ export class CollapsedMenuComponent implements OnInit {
   showUserInfoModal(): void {
     this.modalService.create({
       nzContent: UserInfoComponent,
-      nzWrapClassName: "vertical-center-modal"
+      nzWrapClassName: 'vertical-center-modal'
     });
   }
 }

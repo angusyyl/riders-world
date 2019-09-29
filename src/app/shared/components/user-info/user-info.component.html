@@ -1,5 +1,5 @@
 <nz-modal [nzTitle]="title" nzVisible="true" (nzOnCancel)="destroyModal()" [nzFooter]=null nzWrapClassName="vertical-center-modal">
-  <ng-container *ngIf="loggedIn else signin">
+  <ng-container *ngIf="currentUser else signin">
     <div>{{username}}</div>
   </ng-container>
   <!-- <div *nzModalFooter>
