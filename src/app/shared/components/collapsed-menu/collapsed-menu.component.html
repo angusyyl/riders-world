@@ -19,7 +19,7 @@
       <i nz-icon nzType="setting"></i>
       <span>Setting</span>
     </li>
-    <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Profile' : ''" (click)="showUserInfoModal()">
+    <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Profile' : ''" [routerLink]="['/user-info']">
       <i nz-icon nzType="profile"></i>
       <span>Profile</span>
     </li>

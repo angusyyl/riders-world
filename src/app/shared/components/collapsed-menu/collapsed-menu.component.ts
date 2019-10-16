@@ -20,10 +20,10 @@ export class CollapsedMenuComponent implements OnInit {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  showUserInfoModal(): void {
-    this.modalService.create({
-      nzContent: UserInfoComponent,
-      nzWrapClassName: 'vertical-center-modal'
-    });
-  }
+  // showUserInfoModal(): void {
+  //   this.modalService.create({
+  //     nzContent: UserInfoComponent,
+  //     nzWrapClassName: 'vertical-center-modal'
+  //   });
+  // }
 }

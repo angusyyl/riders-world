@@ -16,8 +16,7 @@ export class UserInfoComponent implements OnInit {
   password: string;
   profilePic: ImageData;
 
-  constructor(private modal: NzModalRef,
-              private router: Router,
+  constructor(private router: Router,
               private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
@@ -30,9 +29,4 @@ export class UserInfoComponent implements OnInit {
       this.router.navigate(['/signin']);
     }
   }
-
-  destroyModal() {
-    this.modal.destroy();
-  }
-
 }
