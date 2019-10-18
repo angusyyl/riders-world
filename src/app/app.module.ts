@@ -19,6 +19,7 @@ import { UserInfoComponent } from './shared/components/user-info/user-info.compo
 import { SignupComponent } from './shared/components/signup/signup.component';
 import { fakeBackendProvider, JwtInterceptor, ErrorInterceptor } from './shared/helpers';
 import { SigninComponent } from './shared/components/signin/signin.component';
+import { GpsMapControlComponent } from './shared/components/gps-map-control/gps-map-control.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { SigninComponent } from './shared/components/signin/signin.component';
     SettingComponent,
     UserInfoComponent,
     SignupComponent,
-    SigninComponent
+    SigninComponent,
+    GpsMapControlComponent
   ],
   imports: [
     BrowserModule,
@@ -47,6 +49,7 @@ import { SigninComponent } from './shared/components/signin/signin.component';
   entryComponents: [
     ChkPtInfoWindowComponent,
     CustomMapControlComponent,
+    GpsMapControlComponent,
     UserInfoComponent
   ],
   providers: [

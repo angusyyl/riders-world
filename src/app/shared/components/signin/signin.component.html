@@ -1,3 +1,4 @@
+<div class="bg">
 <div *ngIf="error" class="alert alert-danger">{{error}}</div>
 <h2>Login</h2>
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -50,3 +51,4 @@
         <a routerLink="/signup" class="btn btn-link">Sign Up</a>
     </div>
 </form>
+</div>

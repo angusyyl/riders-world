@@ -8,7 +8,7 @@ import { TRIPS } from '../../mock-data/mock-trips';
 import { Trip } from '../../models/trip.model';
 import * as MarkerClusterer from '@google/markerclusterer';
 import { CheckPointService } from './../../services/check-point.service';
-
+import { GpsMapControlComponent } from '../gps-map-control/gps-map-control.component';
 
 @Component({
   selector: 'app-search',
@@ -18,12 +18,15 @@ import { CheckPointService } from './../../services/check-point.service';
 export class SearchComponent implements OnInit, AfterViewInit {
   @ViewChild('map') mapElement: any;
   @ViewChild('directionPanel') directionPanelElement: any;
+  @ViewChild('geolocationControlDiv') geolocationControlElement: ElementRef;
   // @ViewChild('chkPtInfoWindow', {read: ElementRef}) chkPtinfoWindowElement: ElementRef;
   map: google.maps.Map;
   directionsService: google.maps.DirectionsService;
   directionsRenderer: google.maps.DirectionsRenderer;
   directionsRequest: google.maps.DirectionsRequest;
   directionsRendererOptions: google.maps.DirectionsRendererOptions;
+  gpsMapControlCompRef: ComponentRef<GpsMapControlComponent>;
+  gpsMapControlDiv: HTMLDivElement;
   customMapControlCompRef: ComponentRef<CustomMapControlComponent>;
   customMapControlDiv: HTMLDivElement;
   transitLayer: google.maps.BicyclingLayer;
@@ -101,6 +104,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
     };
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
+    // gps map control
+    this.gpsMapControlDiv = document.createElement('div');
+
     // custom map control
     this.customMapControlDiv = document.createElement('div');
 
@@ -140,7 +146,32 @@ export class SearchComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // this.zone.run(() => this.onCustomMapControlInit());
     setTimeout(() => {
+      this.onGpsMapControlInit();
       this.onCustomMapControlInit();
+    });
+  }
+
+  onGpsMapControlInit() {
+    if (this.gpsMapControlCompRef) { this.gpsMapControlCompRef.destroy(); }
+
+    // dynamic creation of custom map control component, GpsMapControlComponent should be declared in entryComponents
+    const compFactory = this.resolver.resolveComponentFactory(GpsMapControlComponent);
+    this.gpsMapControlCompRef = compFactory.create(this.injector);
+    const instance = this.gpsMapControlCompRef.instance;
+
+    this.gpsMapControlDiv.appendChild(this.gpsMapControlCompRef.location.nativeElement);
+    this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(this.gpsMapControlDiv);
+
+    // parent-child communication
+    const subscription = instance.currentPositionEmitter.subscribe((currPos: Position) => {
+      this.map.setCenter(new google.maps.LatLng(currPos.coords.latitude, currPos.coords.longitude));
+      this.map.setZoom(12);
+    });
+
+    this.appRef.attachView(this.gpsMapControlCompRef.hostView);
+    this.gpsMapControlCompRef.onDestroy(() => {
+      this.appRef.detachView(this.gpsMapControlCompRef.hostView);
+      subscription.unsubscribe();
     });
   }
 

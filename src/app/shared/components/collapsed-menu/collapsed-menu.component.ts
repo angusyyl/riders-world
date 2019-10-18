@@ -9,7 +9,7 @@ import { UserInfoComponent } from '../user-info/user-info.component';
 })
 export class CollapsedMenuComponent implements OnInit {
 
-  isCollapsed = false;
+  isCollapsed = true;
 
   constructor(private modalService: NzModalService) { }
 
