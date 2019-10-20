@@ -40,8 +40,8 @@ export class SearchComponent implements OnInit, AfterViewInit {
   infoWinChkPtArrivalTimestamp: string;
   infoWinChkPtDepTimestamp: string;
 
-  TRIP_MARKER_TITLE: string = 'Click to display trip route(s)';
-  CHECK_POINT_MARKER_TITLE: string = 'Drag to change location or click to see details';
+  TRIP_MARKER_TITLE = 'Click to display trip route(s)';
+  CHECK_POINT_MARKER_TITLE = 'Drag to change location or click to see details';
 
   // load trips
   trips: Trip[] = TRIPS;
@@ -73,10 +73,10 @@ export class SearchComponent implements OnInit, AfterViewInit {
   // }
 
   constructor(private injector: Injector,
-    private resolver: ComponentFactoryResolver,
-    private appRef: ApplicationRef,
-    private zone: NgZone,
-    private _checkPointService: CheckPointService) {
+              private resolver: ComponentFactoryResolver,
+              private appRef: ApplicationRef,
+              private zone: NgZone,
+              private _checkPointService: CheckPointService) {
   }
 
   /**
@@ -165,7 +165,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     // parent-child communication
     const subscription = instance.currentPositionEmitter.subscribe((currPos: Position) => {
       this.map.setCenter(new google.maps.LatLng(currPos.coords.latitude, currPos.coords.longitude));
-      this.map.setZoom(12);
+      this.map.setZoom(15);
     });
 
     this.appRef.attachView(this.gpsMapControlCompRef.hostView);

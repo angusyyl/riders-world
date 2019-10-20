@@ -27,6 +27,6 @@ export class GpsMapControlComponent implements OnInit {
   }
 
   handleLocationError() {
-    alert("Error: Your browser doesn't support geolocation");
+    alert('Error: Your browser doesn\'t support geolocation');
   }
 }
