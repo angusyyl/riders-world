@@ -1,0 +1,21 @@
+/* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+.google-map {
+  height: 100%;
+  width : 100%;
+}
+
+.direction-panel {
+  width: 500px;
+}
+
+.place-search-box {
+  border: none;
+  width : 200px;
+  height: 30px;
+  font-size: 15px;
+}
+
+.place-search-box:focus {
+  border: 1px solid #4d90fe;
+}

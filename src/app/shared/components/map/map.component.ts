@@ -7,28 +7,28 @@ import { CheckPoint } from '../../models/check-point.model';
 import { TRIPS } from '../../mock-data/mock-trips';
 import { Trip } from '../../models/trip.model';
 import * as MarkerClusterer from '@google/markerclusterer';
-import { CheckPointService } from './../../services/check-point.service';
+import { CheckPointService } from '../../services/check-point.service';
 import { GpsMapControlComponent } from '../gps-map-control/gps-map-control.component';
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css']
+  selector: 'map',
+  templateUrl: './map.component.html',
+  styleUrls: ['./map.component.css']
 })
-export class SearchComponent implements OnInit, AfterViewInit {
+export class MapComponent implements OnInit, AfterViewInit {
   @ViewChild('map') mapElement: any;
+  @ViewChild('placeSearchBox') placeSearchBoxElement: any;
   @ViewChild('directionPanel') directionPanelElement: any;
   @ViewChild('geolocationControlDiv') geolocationControlElement: ElementRef;
   // @ViewChild('chkPtInfoWindow', {read: ElementRef}) chkPtinfoWindowElement: ElementRef;
   map: google.maps.Map;
+  placeSearchBox: google.maps.places.SearchBox;
   directionsService: google.maps.DirectionsService;
   directionsRenderer: google.maps.DirectionsRenderer;
   directionsRequest: google.maps.DirectionsRequest;
   directionsRendererOptions: google.maps.DirectionsRendererOptions;
   gpsMapControlCompRef: ComponentRef<GpsMapControlComponent>;
-  gpsMapControlDiv: HTMLDivElement;
   customMapControlCompRef: ComponentRef<CustomMapControlComponent>;
-  customMapControlDiv: HTMLDivElement;
   transitLayer: google.maps.BicyclingLayer;
   trafficLayer: google.maps.TrafficLayer;
   // info window content dynamically assigned and then appended to chkPtInfoWindow
@@ -68,6 +68,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
   // hold check point markers
   checkPointMarkers: google.maps.Marker[] = [];
 
+  // hold searched place markers
+  searchedPlaceMarkers: google.maps.Marker[] = [];
+
   // ngOnChanges()	{
   //   console.log('parent ngOnChanges()');
   // }
@@ -79,11 +82,15 @@ export class SearchComponent implements OnInit, AfterViewInit {
               private _checkPointService: CheckPointService) {
   }
 
+  ngOnInit(): void {
+    console.log('parent ngOnInit()');
+  }
+
   /**
    * initalize map
    */
-  ngOnInit(): void {
-    console.log('parent ngOnInit()');
+  ngAfterViewInit() {
+    console.log('ngAfterViewInit()');
 
     // map
     const mapOptions: google.maps.MapOptions = {
@@ -104,11 +111,59 @@ export class SearchComponent implements OnInit, AfterViewInit {
     };
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
-    // gps map control
-    this.gpsMapControlDiv = document.createElement('div');
+    // place search box
+    this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(this.placeSearchBoxElement.nativeElement);
+    this.placeSearchBox = new google.maps.places.SearchBox(this.placeSearchBoxElement.nativeElement);
+    // bias the place searchBox results towards current map's viewport.
+    this.map.addListener('bounds_changed', ()=>{
+      this.placeSearchBox.setBounds(this.map.getBounds());
+    });
+    this.placeSearchBox.addListener('places_changed', ()=>{
+      const placeResults: google.maps.places.PlaceResult[] = this.placeSearchBox.getPlaces();
 
-    // custom map control
-    this.customMapControlDiv = document.createElement('div');
+      if (placeResults.length == 0) {
+        return;
+      }
+
+      // clear out the old markers
+      this.searchedPlaceMarkers.forEach((marker)=>{
+        marker.setMap(null);
+      });
+      this.searchedPlaceMarkers = [];
+
+      // for each place, get the icon, name and location.
+      const bounds = new google.maps.LatLngBounds();
+      placeResults.forEach((place)=>{
+        if (!place.geometry) {
+          console.log("Returned place contains no geometry");
+          return;
+        }
+        var icon = {
+          url: place.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25)
+        };
+
+        // Create a marker for each place.
+        this.searchedPlaceMarkers.push(new google.maps.Marker({
+          map: this.map,
+          icon: icon,
+          title: place.name,
+          position: place.geometry.location
+        }));
+
+        if (place.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+      });
+      this.map.fitBounds(bounds);
+
+    })
 
     // info window of marker
     this.chkPtInfoWindow = new google.maps.InfoWindow();
@@ -141,9 +196,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
       panel: this.directionPanelElement.nativeElement
     };
     this.directionsRenderer = new google.maps.DirectionsRenderer(this.directionsRendererOptions);
-  }
 
-  ngAfterViewInit() {
     // this.zone.run(() => this.onCustomMapControlInit());
     setTimeout(() => {
       this.onGpsMapControlInit();
@@ -159,8 +212,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.gpsMapControlCompRef = compFactory.create(this.injector);
     const instance = this.gpsMapControlCompRef.instance;
 
-    this.gpsMapControlDiv.appendChild(this.gpsMapControlCompRef.location.nativeElement);
-    this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(this.gpsMapControlDiv);
+    this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(this.gpsMapControlCompRef.location.nativeElement);
 
     // parent-child communication
     const subscription = instance.currentPositionEmitter.subscribe((currPos: Position) => {
@@ -201,8 +253,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
       console.log(updControlOptions);
     });
 
-    this.customMapControlDiv.appendChild(this.customMapControlCompRef.location.nativeElement);
-    this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(this.customMapControlDiv);
+    this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(this.customMapControlCompRef.location.nativeElement);
 
     this.appRef.attachView(this.customMapControlCompRef.hostView);
     this.customMapControlCompRef.onDestroy(() => {

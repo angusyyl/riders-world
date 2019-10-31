@@ -12,7 +12,7 @@ import { AntDesignModule } from './material-module/ant-design.module';
 import { CustomMapControlComponent } from './shared/components/custom-map-control/custom-map-control.component';
 import { CollapsedMenuComponent } from './shared/components/collapsed-menu/collapsed-menu.component';
 import { PostListComponent } from './shared/components/post-list/post-list.component';
-import { SearchComponent } from './shared/components/search/search.component';
+import { MapComponent } from './shared/components/map/map.component';
 import { SettingComponent } from './shared/components/setting/setting.component';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { UserInfoComponent } from './shared/components/user-info/user-info.component';
@@ -28,7 +28,7 @@ import { GpsMapControlComponent } from './shared/components/gps-map-control/gps-
     CustomMapControlComponent,
     CollapsedMenuComponent,
     PostListComponent,
-    SearchComponent,
+    MapComponent,
     SettingComponent,
     UserInfoComponent,
     SignupComponent,
