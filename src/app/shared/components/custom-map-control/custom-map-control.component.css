@@ -1,13 +1,6 @@
 div.outer {
-  max-width: 300px;
   margin: 10px;
-}
-
-div.inner {
   max-width: 250px;
-  margin: auto;
-  border: 3px solid rgb(255, 255, 255);
-  box-shadow: '0 2px 6px rgba(0,0,0,.3)';
   background-color: rgb(255, 255, 255);
   box-shadow: 0px 2px 5px #d3d3d3;
 }
